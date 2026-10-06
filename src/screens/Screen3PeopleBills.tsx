@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNav } from '../components/BottomNav';
 import { PEOPLE_CONTACTS } from '../constants/mockData';
@@ -21,6 +21,12 @@ import {
 export const Screen3PeopleBills: React.FC = () => {
   const navigate = useNavigate();
   const { transactions } = useBank();
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 2500);
+  };
 
   // 8 Bill Payments icons
   const billPaymentServices = [
@@ -38,7 +44,7 @@ export const Screen3PeopleBills: React.FC = () => {
     if (service.path) {
       navigate(service.path);
     } else {
-      alert(`${service.name} payment service selected.`);
+      showToast(`${service.name} payment service selected`);
     }
   };
 
@@ -214,6 +220,13 @@ export const Screen3PeopleBills: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-xl animate-fade-in flex items-center gap-2">
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
       {/* Bottom Navigation */}
       <BottomNav activeTabOverride="move-money" />

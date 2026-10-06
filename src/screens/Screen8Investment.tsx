@@ -13,6 +13,12 @@ import {
 
 export const Screen8Investment: React.FC = () => {
   const navigate = useNavigate();
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 2500);
+  };
 
   const totalAssetValue = 50571.13;
   const totalGain = 573.63;
@@ -81,7 +87,7 @@ export const Screen8Investment: React.FC = () => {
         <div className="flex items-center justify-between mb-1">
           <h1 className="text-xl font-bold tracking-tight">Investment</h1>
           <button
-            onClick={() => alert('Portfolio report emailed.')}
+            onClick={() => showToast('Portfolio report emailed to registered address')}
             className="p-1 rounded-lg bg-black/10 hover:bg-black/20 text-white transition cursor-pointer"
             title="Info"
           >
@@ -187,7 +193,7 @@ export const Screen8Investment: React.FC = () => {
               return (
                 <button
                   key={product.id}
-                  onClick={() => alert(`${product.title} explored.`)}
+                  onClick={() => showToast(`${product.title} information opened`)}
                   className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
@@ -214,6 +220,13 @@ export const Screen8Investment: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-xl animate-fade-in flex items-center gap-2">
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
       {/* Bottom Navigation */}
       <BottomNav activeTabOverride="investment" />

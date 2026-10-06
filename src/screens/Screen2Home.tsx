@@ -25,6 +25,12 @@ export const Screen2Home: React.FC = () => {
   const navigate = useNavigate();
   const { userAccount, showBalance, setShowBalance } = useBank();
   const [copied, setCopied] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 2500);
+  };
 
   const handleCopyAcc = () => {
     navigator.clipboard?.writeText(userAccount.fullAccountNumber);
@@ -60,7 +66,7 @@ export const Screen2Home: React.FC = () => {
               VM
             </button>
             <button
-              onClick={() => alert('No new notifications.')}
+              onClick={() => showToast('No new notifications')}
               className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white relative cursor-pointer"
               title="Notifications"
             >
@@ -151,7 +157,7 @@ export const Screen2Home: React.FC = () => {
             </button>
 
             <button
-              onClick={() => alert('Camera scanner active.')}
+              onClick={() => showToast('Scan QR camera ready')}
               className="flex flex-col items-center gap-1 group cursor-pointer"
             >
               <div className="w-9 h-9 rounded-xl bg-slate-100 group-hover:bg-[#DB0011] group-hover:text-white flex items-center justify-center text-slate-700 transition">
@@ -212,7 +218,7 @@ export const Screen2Home: React.FC = () => {
 
           {/* 2. Borrowing > */}
           <button
-            onClick={() => alert('Borrowing: Pre-approved loan offers available.')}
+            onClick={() => showToast('Borrowing: Pre-approved loan offers available')}
             className="w-full px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
           >
             <div className="flex items-center gap-3">
@@ -236,7 +242,7 @@ export const Screen2Home: React.FC = () => {
 
           {/* 3. Cards > */}
           <button
-            onClick={() => alert('Cards: 1 Debit Card Active.')}
+            onClick={() => showToast('Cards: 1 Debit Card Active')}
             className="w-full px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
           >
             <div className="flex items-center gap-3">
@@ -295,6 +301,13 @@ export const Screen2Home: React.FC = () => {
           </button>
         </div>
       </main>
+
+      {/* Floating Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-full shadow-xl animate-fade-in flex items-center gap-2">
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
       {/* Bottom Navigation (Home, Investment, Move Money, Support) with #DB0011 active */}
       <BottomNav activeTabOverride="home" />

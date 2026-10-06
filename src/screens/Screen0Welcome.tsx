@@ -51,10 +51,7 @@ export const Screen0Welcome: React.FC = () => {
 
             {/* Not yet, open a new account - Outlined */}
             <button
-              onClick={() => {
-                alert('Account opening onboarding demo: Navigating to registration & login.');
-                navigate('/login');
-              }}
+              onClick={() => navigate('/login')}
               className="w-full h-12 bg-white hover:bg-slate-50 active:scale-[0.99] text-black border border-slate-300 font-bold text-sm rounded-lg flex items-center justify-center transition cursor-pointer"
             >
               <span>Not yet, open a new account</span>

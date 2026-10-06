@@ -19,6 +19,12 @@ export const Screen05Login: React.FC = () => {
   // Biometric state
   const [isScanning, setIsScanning] = useState(false);
   const [bioSuccess, setBioSuccess] = useState(false);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setInfoMessage(msg);
+    setTimeout(() => setInfoMessage(null), 3000);
+  };
 
   const handleKeyPress = (num: string) => {
     if (pin.length < 6) {
@@ -206,7 +212,7 @@ export const Screen05Login: React.FC = () => {
               <div className="mt-3 flex items-center justify-end w-full max-w-xs px-1 text-xs">
                 <button
                   type="button"
-                  onClick={() => alert('PIN reset instructions sent to registered mobile number.')}
+                  onClick={() => showToast('PIN reset instructions sent to registered mobile number.')}
                   className="text-slate-600 hover:text-black cursor-pointer font-medium"
                 >
                   Forgot PIN?
@@ -258,7 +264,7 @@ export const Screen05Login: React.FC = () => {
               <div className="flex justify-end">
                 <button
                   type="button"
-                  onClick={() => alert('Password reset verification link sent.')}
+                  onClick={() => showToast('Password reset verification link sent.')}
                   className="text-xs text-[#DB0011] font-bold hover:underline cursor-pointer"
                 >
                   Forgot password?
@@ -332,6 +338,13 @@ export const Screen05Login: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Inline Info Toast */}
+        {infoMessage && (
+          <div className="mb-2 bg-slate-900 text-white text-xs font-medium py-2 px-3 rounded-lg text-center shadow-lg animate-fade-in">
+            {infoMessage}
+          </div>
+        )}
 
         {/* Footer: Secure login with Digital Secure Key */}
         <div className="pt-3 border-t border-slate-200 flex items-center justify-center gap-1.5 text-xs text-slate-600">

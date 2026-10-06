@@ -333,10 +333,10 @@ export const Screen9Profile: React.FC = () => {
                   </div>
                   <button
                     onClick={() => {
-                      alert('Re-submission portal opened.');
+                      setLangToast('KYC documents are up to date');
                       setActiveModal(null);
                     }}
-                    className="w-full mt-2 h-10 bg-[#DB0011] hover:bg-[#b5000e] text-white font-bold rounded-lg"
+                    className="w-full mt-2 h-10 bg-[#DB0011] hover:bg-[#b5000e] text-white font-bold rounded-lg cursor-pointer"
                   >
                     Re-submit KYC
                   </button>

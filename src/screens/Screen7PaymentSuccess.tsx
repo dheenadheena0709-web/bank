@@ -15,6 +15,7 @@ export const Screen7PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
   const { lastPayment } = useBank();
   const [copiedReceipt, setCopiedReceipt] = useState(false);
+  const [showSupport, setShowSupport] = useState(false);
 
   useEffect(() => {
     try {
@@ -65,7 +66,7 @@ export const Screen7PaymentSuccess: React.FC = () => {
           </button>
 
           <button
-            onClick={() => alert('HSBC 24x7 Priority Support: 1800-420-1234. Reference: ' + displayTxId)}
+            onClick={() => setShowSupport(!showSupport)}
             className="p-2 rounded-lg bg-white border border-slate-200 text-slate-700 hover:text-black shadow-xs transition cursor-pointer"
             title="Help & Support"
             aria-label="Help"
@@ -74,6 +75,12 @@ export const Screen7PaymentSuccess: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {showSupport && (
+        <div className="my-2 p-2.5 bg-slate-900 text-white text-xs rounded-lg text-center font-medium shadow-md">
+          HSBC 24x7 Priority Support: 1800-420-1234 (Ref: {displayTxId})
+        </div>
+      )}
 
       {copiedReceipt && (
         <div className="my-2 p-2 bg-emerald-100 text-emerald-800 text-xs rounded-lg text-center font-bold">
