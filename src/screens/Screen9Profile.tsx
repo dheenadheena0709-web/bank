@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNav } from '../components/BottomNav';
 import { useBank } from '../context/BankContext';
-import { PWAInstallModal } from '../components/PWAInstallModal';
 import {
   User,
   Phone,
@@ -13,8 +12,6 @@ import {
   LogOut,
   X,
   Globe,
-  Download,
-  Smartphone,
   Check,
   CheckCircle2,
   Settings
@@ -41,7 +38,6 @@ export const Screen9Profile: React.FC = () => {
   const { userAccount, setIsLoggedIn } = useBank();
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('en-IN');
-  const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
   const [langToast, setLangToast] = useState<string | null>(null);
 
   const handleLogout = () => {
@@ -221,45 +217,6 @@ export const Screen9Profile: React.FC = () => {
               <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition" />
             </div>
           </button>
-
-          {/* Install to Home Screen guide */}
-          <button
-            onClick={() => setShowInstallModal(true)}
-            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-red-50 text-[#DB0011] flex items-center justify-center font-bold">
-                <Smartphone className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-black group-hover:text-[#DB0011]">
-                  Install to Home Screen
-                </h3>
-                <p className="text-xs text-slate-500">Add HSBC app icon to your phone</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition" />
-          </button>
-
-          {/* Download Project ZIP option */}
-          <a
-            href="/hsbc-mobile-banking.zip"
-            download="hsbc-mobile-banking.zip"
-            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-                <Download className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-black group-hover:text-[#DB0011]">
-                  Download Project Source Code
-                </h3>
-                <p className="text-xs text-slate-500">Download complete project ZIP (1.5 MB)</p>
-              </div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition" />
-          </a>
         </div>
 
         {/* Security Summary */}
@@ -396,12 +353,6 @@ export const Screen9Profile: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* PWA INSTALL MODAL */}
-      <PWAInstallModal
-        isOpen={showInstallModal}
-        onClose={() => setShowInstallModal(false)}
-      />
 
       {/* Bottom Navigation */}
       <BottomNav activeTabOverride="support" />
