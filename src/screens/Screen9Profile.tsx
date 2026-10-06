@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNav } from '../components/BottomNav';
 import { useBank } from '../context/BankContext';
+import { PWAInstallModal } from '../components/PWAInstallModal';
 import {
   User,
   Phone,
@@ -11,25 +12,58 @@ import {
   ShieldCheck,
   LogOut,
   X,
-  CheckCircle2
+  Globe,
+  Download,
+  Smartphone,
+  Check,
+  CheckCircle2,
+  Settings
 } from 'lucide-react';
+
+interface LanguageOption {
+  code: string;
+  name: string;
+  native: string;
+}
+
+const LANGUAGES: LanguageOption[] = [
+  { code: 'en-IN', name: 'English (India)', native: 'English' },
+  { code: 'hi-IN', name: 'Hindi', native: 'हिन्दी' },
+  { code: 'ta-IN', name: 'Tamil', native: 'தமிழ்' },
+  { code: 'te-IN', name: 'Telugu', native: 'తెలుగు' },
+  { code: 'mr-IN', name: 'Marathi', native: 'मराठी' },
+  { code: 'bn-IN', name: 'Bengali', native: 'বাংলা' },
+  { code: 'kn-IN', name: 'Kannada', native: 'ಕನ್ನಡ' },
+];
 
 export const Screen9Profile: React.FC = () => {
   const navigate = useNavigate();
   const { userAccount, setIsLoggedIn } = useBank();
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('en-IN');
+  const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
+  const [langToast, setLangToast] = useState<string | null>(null);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     navigate('/');
   };
 
+  const currentLangObj = LANGUAGES.find((l) => l.code === selectedLanguage) || LANGUAGES[0];
+
+  const handleSelectLanguage = (lang: LanguageOption) => {
+    setSelectedLanguage(lang.code);
+    setActiveModal(null);
+    setLangToast(`Language updated to ${lang.name} (${lang.native})`);
+    setTimeout(() => setLangToast(null), 3000);
+  };
+
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#F5F5F5] min-h-[740px]">
+    <div className="flex-1 flex flex-col justify-between bg-[#F5F5F5] min-h-screen">
       {/* Header Background: #DB0011 */}
       <header className="bg-[#DB0011] text-white px-4 pt-3 pb-5 shadow-sm">
         <div className="flex items-center justify-between mb-3">
-          <h1 className="text-xl font-bold tracking-tight">My details</h1>
+          <h1 className="text-xl font-bold tracking-tight">My details & Settings</h1>
           <button
             onClick={handleLogout}
             className="flex items-center gap-1 text-xs text-white/90 hover:text-white bg-black/15 px-2.5 py-1 rounded-md transition cursor-pointer font-bold"
@@ -59,8 +93,17 @@ export const Screen9Profile: React.FC = () => {
         </div>
       </header>
 
+      {/* Language toast */}
+      {langToast && (
+        <div className="mx-4 mt-3 p-2.5 bg-emerald-600 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span>{langToast}</span>
+        </div>
+      )}
+
       {/* Main List */}
       <main className="flex-1 px-4 py-3 space-y-3.5">
+        {/* Personal & Account Details */}
         <div className="bg-[#FFFFFF] rounded-xl border border-slate-200/80 shadow-sm overflow-hidden divide-y divide-slate-100">
           {/* 1. Personal details (ID and tax residency) > */}
           <button
@@ -144,6 +187,81 @@ export const Screen9Profile: React.FC = () => {
           </button>
         </div>
 
+        {/* SETTINGS & APP PREFERENCES (Language Selector, PWA, Tools) */}
+        <div className="bg-[#FFFFFF] rounded-xl border border-slate-200/80 shadow-sm overflow-hidden divide-y divide-slate-100">
+          <div className="px-3.5 py-2 bg-slate-50/70 border-b border-slate-100 flex items-center gap-1.5">
+            <Settings className="w-3.5 h-3.5 text-slate-500" />
+            <h4 className="font-bold text-slate-700 uppercase tracking-wider text-[10px]">
+              Settings & Preferences
+            </h4>
+          </div>
+
+          {/* Language Selector inside settings menu */}
+          <button
+            onClick={() => setActiveModal('language')}
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center font-bold">
+                <Globe className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-black group-hover:text-[#DB0011]">
+                  App Language
+                </h3>
+                <p className="text-xs text-slate-500">
+                  {currentLangObj.name} ({currentLangObj.native})
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+                {currentLangObj.native}
+              </span>
+              <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition" />
+            </div>
+          </button>
+
+          {/* Install to Home Screen guide */}
+          <button
+            onClick={() => setShowInstallModal(true)}
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-red-50 text-[#DB0011] flex items-center justify-center font-bold">
+                <Smartphone className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-black group-hover:text-[#DB0011]">
+                  Install to Home Screen
+                </h3>
+                <p className="text-xs text-slate-500">Add HSBC app icon to your phone</p>
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition" />
+          </button>
+
+          {/* Download Project ZIP option */}
+          <a
+            href="/hsbc-mobile-banking.zip"
+            download="hsbc-mobile-banking.zip"
+            className="w-full p-3.5 flex items-center justify-between hover:bg-slate-50 transition text-left cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                <Download className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-black group-hover:text-[#DB0011]">
+                  Download Project Source Code
+                </h3>
+                <p className="text-xs text-slate-500">Download complete project ZIP (1.5 MB)</p>
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 transition" />
+          </a>
+        </div>
+
         {/* Security Summary */}
         <div className="bg-[#FFFFFF] rounded-xl border border-slate-200/80 p-3.5 shadow-sm space-y-2 text-xs">
           <h4 className="font-bold text-black uppercase tracking-wider text-[10px]">
@@ -166,6 +284,7 @@ export const Screen9Profile: React.FC = () => {
           <div className="bg-white rounded-xl w-full max-w-sm p-4 shadow-xl text-left">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-2.5">
               <h3 className="text-sm font-bold text-black">
+                {activeModal === 'language' && 'Select App Language'}
                 {activeModal === 'personal' && 'Personal details'}
                 {activeModal === 'contact' && 'Contact details'}
                 {activeModal === 'employment' && 'Employment details'}
@@ -180,6 +299,32 @@ export const Screen9Profile: React.FC = () => {
             </div>
 
             <div className="space-y-2 text-xs text-slate-600 py-1">
+              {/* LANGUAGE SELECTOR */}
+              {activeModal === 'language' && (
+                <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
+                  {LANGUAGES.map((lang) => {
+                    const isSelected = selectedLanguage === lang.code;
+                    return (
+                      <button
+                        key={lang.code}
+                        onClick={() => handleSelectLanguage(lang)}
+                        className={`w-full p-2.5 rounded-lg border text-left flex items-center justify-between transition cursor-pointer ${
+                          isSelected
+                            ? 'border-[#DB0011] bg-red-50 text-[#DB0011] font-bold'
+                            : 'border-slate-200 hover:bg-slate-50 text-slate-800'
+                        }`}
+                      >
+                        <div>
+                          <div className="text-xs font-semibold">{lang.name}</div>
+                          <div className="text-[11px] text-slate-500">{lang.native}</div>
+                        </div>
+                        {isSelected && <Check className="w-4 h-4 text-[#DB0011]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
               {activeModal === 'personal' && (
                 <>
                   <div className="flex justify-between py-1 border-b border-slate-100">
@@ -244,13 +389,19 @@ export const Screen9Profile: React.FC = () => {
 
             <button
               onClick={() => setActiveModal(null)}
-              className="w-full mt-3 h-9 bg-slate-100 hover:bg-slate-200 text-xs font-bold text-black rounded-lg"
+              className="w-full mt-3 h-9 bg-slate-100 hover:bg-slate-200 text-xs font-bold text-black rounded-lg cursor-pointer"
             >
               Close
             </button>
           </div>
         </div>
       )}
+
+      {/* PWA INSTALL MODAL */}
+      <PWAInstallModal
+        isOpen={showInstallModal}
+        onClose={() => setShowInstallModal(false)}
+      />
 
       {/* Bottom Navigation */}
       <BottomNav activeTabOverride="support" />

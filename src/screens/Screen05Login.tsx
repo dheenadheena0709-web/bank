@@ -295,7 +295,7 @@ export const Screen05Login: React.FC = () => {
                   }`}
                 >
                   <img
-                    src="/src/assets/images/biometric_face_fingerprint_1791261927008.jpg"
+                    src="/biometric_face_fingerprint.jpg"
                     alt="Touch ID / Face ID Biometric"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
